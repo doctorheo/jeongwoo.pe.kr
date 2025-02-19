@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>편집 접수 시스템</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; }
+        .container { width: 350px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .submit-btn { background-color: #007BFF; color: white; border: none; padding: 10px; width: 100%; font-size: 16px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        .submit-btn:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>접수 시스템</h2>
+        <form action="https://formsubmit.co/jeongwoohoho@gmail.com" method="POST">
+            <div class="input-group">
+                <label for="handle">유튜브 핸들</label>
+                <input type="text" id="handle" name="handle" required>
+            </div>
+            <input type="hidden" name="_subject" value="새로운 접수 요청">
+            <button type="submit" class="submit-btn">접수하기</button>
+        </form>
+    </div>
+</body>
+</html>

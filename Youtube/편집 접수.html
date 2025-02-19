@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>편집 접수 시스템</title>
+    <title>접수 시스템</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; }
@@ -18,14 +19,30 @@
 <body>
     <div class="container">
         <h2>접수 시스템</h2>
-        <form action="https://formsubmit.co/jeongwoohoho@gmail.com" method="POST">
+        <form id="submissionForm">
             <div class="input-group">
                 <label for="handle">유튜브 핸들</label>
                 <input type="text" id="handle" name="handle" required>
             </div>
-            <input type="hidden" name="_subject" value="새로운 접수 요청">
             <button type="submit" class="submit-btn">접수하기</button>
         </form>
     </div>
+
+    <script>
+        emailjs.init("0cgjp4o3ztpOmGrAD"); // EmailJS에서 제공하는 공개 키 입력
+
+        document.getElementById("submissionForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            let handle = document.getElementById("handle").value;
+
+            emailjs.send("service_6obancs","template_kjkddis", {
+                handle: handle
+            }).then(function(response) {
+                alert("접수 완료! 이메일이 전송되었습니다.");
+            }, function(error) {
+                alert("이메일 전송 실패: " + error.text);
+            });
+        });
+    </script>
 </body>
 </html>

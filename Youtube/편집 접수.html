@@ -52,8 +52,9 @@
 
             let formData = new FormData();
             formData.append("file", videoFile);
+            formData.append("upload_preset", "videovideo");
 
-            fetch("https://file.io", {
+            fetch("https://api.cloudinary.com/v1_1/davlxytqu/video/upload", {
                 method: "POST",
                 body: formData
             })

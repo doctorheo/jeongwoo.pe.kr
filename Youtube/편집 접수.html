@@ -14,12 +14,21 @@
         input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
         .submit-btn { background-color: #007BFF; color: white; border: none; padding: 10px; width: 100%; font-size: 16px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background-color: #0056b3; }
-    </style>
+            .loading {
+            display: none;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            color: #007BFF;
+            margin-top: 10px;
+        }
+</style>
 </head>
 <body>
     <div class="container">
         <h2>접수 시스템</h2>
         <form id="submissionForm">
+        <div class="loading" id="loading">업로드 중입니다... 잠시만 기다려 주세요.</div>
             <div class="input-group">
                 <label for="handle">유튜브 핸들</label>
                 <input type="text" id="handle" name="handle" required>
@@ -54,28 +63,35 @@
             formData.append("file", videoFile);
             formData.append("upload_preset", "videovideo");
 
+            document.getElementById("loading").innerText = "동영상 업로드 중...";
+            document.getElementById("loading").style.display = "block";
             fetch("https://api.cloudinary.com/v1_1/davlxytqu/video/upload", {
                 method: "POST",
                 body: formData
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    let videoUrl = data.link; // 업로드된 파일 URL
+                if (data.secure_url) {
+                    document.getElementById("loading").innerText = "이메일 전송 중...";
+                    let videoUrl = data.secure_url; // 업로드된 파일 URL
                     emailjs.send("service_6obancs", "template_kjkddis", {
                         handle: handle,
                         video_url: videoUrl,
                         request: request
                     }).then(function(response) {
+                        document.getElementById("loading").innerText = "업로드 및 이메일 전송 완료!";
+                        setTimeout(() => { document.getElementById("loading").style.display = "none"; }, 2000);
                         alert("접수 완료! 이메일이 전송되었습니다.");
                     }, function(error) {
                         alert("이메일 전송 실패: " + error.text);
                     });
                 } else {
+                    document.getElementById("loading").style.display = "none";
                     alert("파일 업로드 실패: " + data.error);
                 }
             })
             .catch(error => {
+                document.getElementById("loading").style.display = "none";
                 alert("업로드 중 오류 발생: " + error);
             });
         });

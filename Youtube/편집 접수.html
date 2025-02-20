@@ -61,58 +61,68 @@
             videoContainer.appendChild(newInput);
         }
 
-        document.getElementById("submissionForm").addEventListener("submit", function(event) {
+        document.getElementById("submissionForm").addEventListener("submit", async function(event) {
             event.preventDefault();
             let handle = document.getElementById("handle").value;
             let email = document.getElementById("email").value;
             let request = document.getElementById("request").value;
             let videoInputs = document.querySelectorAll(".video-input");
             let videoFiles = [];
-            
+
             videoInputs.forEach(input => {
                 if (input.files[0]) {
                     videoFiles.push(input.files[0]);
                 }
             });
+
             if (videoFiles.length === 0) {
                 alert("동영상 파일을 선택하세요.");
                 return;
             }
-            
-            document.getElementById("loading").innerText = "동영상 업로드 중...";
+
+            document.getElementById("loading").innerText = `총 ${videoFiles.length}개의 동영상 업로드 시작...`;
             document.getElementById("loading").style.display = "block";
-            
-            let uploadPromises = videoFiles.map(file => {
+
+            let uploadedVideoUrls = [];
+
+            for (let i = 0; i < videoFiles.length; i++) {
+                document.getElementById("loading").innerText = `동영상 ${i + 1}/${videoFiles.length} 업로드 중...`;
                 let formData = new FormData();
-                formData.append("file", file);
+                formData.append("file", videoFiles[i]);
                 formData.append("upload_preset", "videovideo");
-                return fetch("https://api.cloudinary.com/v1_1/davlxytqu/video/upload", { method: "POST", body: formData })
-                        .then(response => response.json());
-            });
-            
-            Promise.all(uploadPromises).then(data => {
-                if (data.every(video => video.secure_url)) {
-                    let videoUrls = data.map(video => video.secure_url).join(", ");
-                    document.getElementById("loading").innerText = "이메일 전송 중...";
-                    emailjs.send("service_6obancs", "template_kjkddis", {
-                        email: email,
-                        handle: handle,
-                        video_urls: videoUrls,
-                        request: request
-                    }).then(function(response) {
-                        document.getElementById("loading").innerText = "업로드 및 이메일 전송 완료!";
-                        setTimeout(() => { document.getElementById("loading").style.display = "none"; }, 2000);
-                        alert("접수 완료! 이메일이 전송되었습니다.");
-                    }, function(error) {
-                        alert("이메일 전송 실패: " + error.text);
+
+                try {
+                    let response = await fetch("https://api.cloudinary.com/v1_1/davlxytqu/video/upload", {
+                        method: "POST",
+                        body: formData
                     });
-                } else {
+                    let data = await response.json();
+
+                    if (data.secure_url) {
+                        uploadedVideoUrls.push(data.secure_url);
+                    } else {
+                        throw new Error("Cloudinary 업로드 실패");
+                    }
+                } catch (error) {
                     document.getElementById("loading").style.display = "none";
-                    alert("파일 업로드 실패");
+                    alert(`동영상 ${i + 1} 업로드 실패: ${error.message}`);
+                    return;
                 }
-            }).catch(error => {
+            }
+
+            document.getElementById("loading").innerText = "이메일 전송 중...";
+            emailjs.send("service_6obancs", "template_kjkddis", {
+                email: email,
+                handle: handle,
+                video_urls: uploadedVideoUrls.join(", "),
+                request: request
+            }).then(function(response) {
+                document.getElementById("loading").innerText = "업로드 및 이메일 전송 완료!";
+                setTimeout(() => { document.getElementById("loading").style.display = "none"; }, 2000);
+                alert("접수 완료! 이메일이 전송되었습니다.");
+            }, function(error) {
                 document.getElementById("loading").style.display = "none";
-                alert("업로드 중 오류 발생: " + error);
+                alert("이메일 전송 실패: " + error.text);
             });
         });
     </script>

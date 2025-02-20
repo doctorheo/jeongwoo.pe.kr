@@ -8,40 +8,32 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
         body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; }
-        .container { width: 350px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; }
+        .container { width: 400px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; }
         .input-group { margin-bottom: 15px; text-align: left; }
         label { font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px; }
         input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
         .submit-btn { background-color: #007BFF; color: white; border: none; padding: 10px; width: 100%; font-size: 16px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background-color: #0056b3; }
-            .loading {
-            display: none;
-            text-align: center;
-            font-size: 16px;
-            font-weight: bold;
-            color: #007BFF;
-            margin-top: 10px;
-        }
-</style>
+        .loading { display: none; text-align: center; font-size: 16px; font-weight: bold; color: #007BFF; margin-top: 10px; }
+    </style>
 </head>
 <body>
     <div class="container">
         <h2>접수 시스템</h2>
         <form id="submissionForm">
-        <div class="loading" id="loading">업로드 중입니다... 잠시만 기다려 주세요.</div>
+            <div class="loading" id="loading">업로드 중입니다... 잠시만 기다려 주세요.</div>
             <div class="input-group">
                 <label for="handle">유튜브 핸들</label>
                 <input type="text" id="handle" name="handle" required>
             </div>
+            <div class="input-group" id="videoContainer">
+                <label>동영상 파일</label>
+                <input type="file" class="video-input" name="video" accept="video/*" required>
+            </div>
+            <button type="button" onclick="addVideoInput()" class="submit-btn" style="margin-bottom: 10px;">동영상 추가</button>
             <div class="input-group">
-                <label for="video">동영상 파일</label>
-                <input type="file" id="video" name="video" accept="
-                video/mp4, video/mov, video/avi, video/wmv, video/flv,
-                video/mkv, video/webm, video/ogv, video/mpeg, video/3gp,
-                video/mpg, video/mxf, video/ts, video/rm, video/rmvb,
-                video/vob, video/asf, video/divx, video/f4v
-                " required>
-
+                <label for="email">답장 받을 이메일</label>
+                <input type="email" id="email" name="email" placeholder="your-email@example.com" required>
             </div>
             <div class="input-group">
                 <label for="request">요청 사항</label>
@@ -52,37 +44,60 @@
     </div>
 
     <script>
-        emailjs.init("0cgjp4o3ztpOmGrAD"); // EmailJS에서 제공하는 공개 키 입력
+        emailjs.init("0cgjp4o3ztpOmGrAD");
+
+        function addVideoInput() {
+            let videoContainer = document.getElementById("videoContainer");
+            let videoInputs = document.querySelectorAll(".video-input");
+            if (videoInputs.length >= 10) {
+                alert("최대 10개의 동영상만 업로드할 수 있습니다.");
+                return;
+            }
+            let newInput = document.createElement("input");
+            newInput.type = "file";
+            newInput.className = "video-input";
+            newInput.name = "video";
+            newInput.accept = "video/*";
+            videoContainer.appendChild(newInput);
+        }
 
         document.getElementById("submissionForm").addEventListener("submit", function(event) {
             event.preventDefault();
             let handle = document.getElementById("handle").value;
-            let videoFile = document.getElementById("video").files[0];
+            let email = document.getElementById("email").value;
             let request = document.getElementById("request").value;
-
-            if (!videoFile) {
+            let videoInputs = document.querySelectorAll(".video-input");
+            let videoFiles = [];
+            
+            videoInputs.forEach(input => {
+                if (input.files[0]) {
+                    videoFiles.push(input.files[0]);
+                }
+            });
+            if (videoFiles.length === 0) {
                 alert("동영상 파일을 선택하세요.");
                 return;
             }
-
-            let formData = new FormData();
-            formData.append("file", videoFile);
-            formData.append("upload_preset", "videovideo");
-
+            
             document.getElementById("loading").innerText = "동영상 업로드 중...";
             document.getElementById("loading").style.display = "block";
-            fetch("https://api.cloudinary.com/v1_1/davlxytqu/video/upload", {
-                method: "POST",
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.secure_url) {
+            
+            let uploadPromises = videoFiles.map(file => {
+                let formData = new FormData();
+                formData.append("file", file);
+                formData.append("upload_preset", "videovideo");
+                return fetch("https://api.cloudinary.com/v1_1/davlxytqu/video/upload", { method: "POST", body: formData })
+                        .then(response => response.json());
+            });
+            
+            Promise.all(uploadPromises).then(data => {
+                if (data.every(video => video.secure_url)) {
+                    let videoUrls = data.map(video => video.secure_url).join(", ");
                     document.getElementById("loading").innerText = "이메일 전송 중...";
-                    let videoUrl = data.secure_url; // 업로드된 파일 URL
                     emailjs.send("service_6obancs", "template_kjkddis", {
+                        email: email,
                         handle: handle,
-                        video_url: videoUrl,
+                        video_urls: videoUrls,
                         request: request
                     }).then(function(response) {
                         document.getElementById("loading").innerText = "업로드 및 이메일 전송 완료!";
@@ -93,10 +108,9 @@
                     });
                 } else {
                     document.getElementById("loading").style.display = "none";
-                    alert("파일 업로드 실패: " + data.error);
+                    alert("파일 업로드 실패");
                 }
-            })
-            .catch(error => {
+            }).catch(error => {
                 document.getElementById("loading").style.display = "none";
                 alert("업로드 중 오류 발생: " + error);
             });

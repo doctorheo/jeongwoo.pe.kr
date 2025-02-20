@@ -11,7 +11,7 @@
         .container { width: 350px; background-color: white; border-radius: 10px; padding: 20px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; }
         .input-group { margin-bottom: 15px; text-align: left; }
         label { font-size: 14px; font-weight: bold; display: block; margin-bottom: 5px; }
-        input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        input, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
         .submit-btn { background-color: #007BFF; color: white; border: none; padding: 10px; width: 100%; font-size: 16px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
         .submit-btn:hover { background-color: #0056b3; }
     </style>
@@ -24,24 +24,41 @@
                 <label for="handle">유튜브 핸들</label>
                 <input type="text" id="handle" name="handle" required>
             </div>
+            <div class="input-group">
+                <label for="video">동영상 파일</label>
+                <input type="file" id="video" name="video" accept="video/*" required>
+            </div>
             <button type="submit" class="submit-btn">접수하기</button>
         </form>
     </div>
 
     <script>
-        emailjs.init("0cgjp4o3ztpOmGrAD"); // EmailJS에서 제공하는 공개 키 입력
+        emailjs.init("YOUR_PUBLIC_KEY"); // EmailJS에서 제공하는 공개 키 입력
 
         document.getElementById("submissionForm").addEventListener("submit", function(event) {
             event.preventDefault();
             let handle = document.getElementById("handle").value;
+            let videoFile = document.getElementById("video").files[0];
 
-            emailjs.send("service_6obancs","template_kjkddis", {
-                handle: handle
-            }).then(function(response) {
-                alert("접수 완료! 이메일이 전송되었습니다.");
-            }, function(error) {
-                alert("이메일 전송 실패: " + error.text);
-            });
+            if (!videoFile) {
+                alert("동영상 파일을 선택하세요.");
+                return;
+            }
+
+            let reader = new FileReader();
+            reader.readAsDataURL(videoFile);
+            reader.onload = function() {
+                let videoData = reader.result;
+                
+                emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                    handle: handle,
+                    video: videoData
+                }).then(function(response) {
+                    alert("접수 완료! 이메일이 전송되었습니다.");
+                }, function(error) {
+                    alert("이메일 전송 실패: " + error.text);
+                });
+            };
         });
     </script>
 </body>

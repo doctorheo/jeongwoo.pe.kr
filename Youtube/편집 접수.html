@@ -50,21 +50,33 @@
                 return;
             }
 
-            let reader = new FileReader();
-            reader.readAsDataURL(videoFile);
-            reader.onload = function() {
-                let videoData = reader.result;
-                
-                emailjs.send("service_6obancs", "template_kjkddis", {
-                    handle: handle,
-                    video: videoData,
-                    request: request
-                }).then(function(response) {
-                    alert("접수 완료! 이메일이 전송되었습니다.");
-                }, function(error) {
-                    alert("이메일 전송 실패: " + error.text);
-                });
-            };
+            let formData = new FormData();
+            formData.append("file", videoFile);
+
+            fetch("https://file.io", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    let videoUrl = data.link; // 업로드된 파일 URL
+                    emailjs.send("service_6obancs", "template_kjkddis", {
+                        handle: handle,
+                        video_url: videoUrl,
+                        request: request
+                    }).then(function(response) {
+                        alert("접수 완료! 이메일이 전송되었습니다.");
+                    }, function(error) {
+                        alert("이메일 전송 실패: " + error.text);
+                    });
+                } else {
+                    alert("파일 업로드 실패: " + data.error);
+                }
+            })
+            .catch(error => {
+                alert("업로드 중 오류 발생: " + error);
+            });
         });
     </script>
 </body>

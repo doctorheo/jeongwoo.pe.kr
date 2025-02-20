@@ -29,6 +29,10 @@
                 <input type="file" id="video" name="video" accept="video/*" required>
             </div>
             <button type="submit" class="submit-btn">접수하기</button>
+                    <div class="input-group">
+                <label for="request">요청 사항</label>
+                <textarea id="request" name="request" rows="4" placeholder="어떻게 해드릴까요?" required></textarea>
+            </div>
         </form>
     </div>
 
@@ -50,7 +54,7 @@
             reader.onload = function() {
                 let videoData = reader.result;
                 
-                emailjs.send("service_6obancs","template_kjkddis", {
+                emailjs.send("service_6obancs", "template_kjkddis", {
                     handle: handle,
                     video: videoData
                 }).then(function(response) {

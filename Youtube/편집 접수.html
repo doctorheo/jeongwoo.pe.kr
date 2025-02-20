@@ -33,7 +33,7 @@
     </div>
 
     <script>
-        emailjs.init("YOUR_PUBLIC_KEY"); // EmailJS에서 제공하는 공개 키 입력
+        emailjs.init("0cgjp4o3ztpOmGrAD"); // EmailJS에서 제공하는 공개 키 입력
 
         document.getElementById("submissionForm").addEventListener("submit", function(event) {
             event.preventDefault();
@@ -50,7 +50,7 @@
             reader.onload = function() {
                 let videoData = reader.result;
                 
-                emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+                emailjs.send("service_6obancs","template_kjkddis", {
                     handle: handle,
                     video: videoData
                 }).then(function(response) {

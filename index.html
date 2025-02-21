@@ -1,12 +1,83 @@
 <!doctype html>
-<html>
-  <head>
-    <link href="https://raw.githubusercontent.com/doctorheo/html/main/pngwing.com.ico" rel="shortcut icon" type="image/x-icon">
-    <title>jeongwoo</title>
-  </head>
-  <body>
-   <font size=5>안녕하세요! jeongwoo.pe.kr에 오신것을 환영합니다</font><br>
-    <br><br>
-    <font size=4><a href="#" onclick="location.href='/new/스크래치.html'">scratch 작품보러가기</a></font>
-  </body>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jeongwoo</title>
+    <link rel="shortcut icon" href="https://raw.githubusercontent.com/doctorheo/html/main/pngwing.com.ico" type="image/x-icon">
+    
+    <!-- Google reCAPTCHA -->
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+    <!-- CSS 스타일 -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            text-align: center;
+            margin: 50px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+        h1 {
+            font-size: 24px;
+            color: #444;
+        }
+        p {
+            font-size: 18px;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background: #007bff;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .g-recaptcha {
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>안녕하세요! <br> jeongwoo.pe.kr에 오신 것을 환영합니다</h1>
+        
+        <p>
+            <a href="#" class="button" onclick="checkCaptcha()">Scratch 작품 보러가기</a>
+        </p>
+
+        <!-- Google reCAPTCHA -->
+        <div class="g-recaptcha" data-sitekey="6Lc21d0qAAAAAJXtkLxKmzDrk54DM83VC5SPFogm"></div>
+
+        <p style="font-size: 14px; color: #666;">reCAPTCHA를 체크한 후 버튼을 클릭하세요.</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        function checkCaptcha() {
+            var response = grecaptcha.getResponse();
+            if (response.length === 0) {
+                alert("먼저 reCAPTCHA를 체크해주세요!");
+            } else {
+                window.location.href = "/new/스크래치.html";
+            }
+        }
+    </script>
+
+</body>
 </html>

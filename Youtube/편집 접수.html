@@ -114,7 +114,16 @@
             emailjs.send("service_6obancs", "template_kjkddis", {
                 email: email,
                 handle: handle,
-                video_urls: uploadedVideoUrls.join(", "),
+                video_url1: uploadedVideoUrls[0],
+                video_url2: uploadedVideoUrls[1],
+                video_url3: uploadedVideoUrls[2],
+                video_url4: uploadedVideoUrls[3],
+                video_url5: uploadedVideoUrls[4],
+                video_url6: uploadedVideoUrls[5],
+                video_url7: uploadedVideoUrls[6],
+                video_url8: uploadedVideoUrls[7],
+                video_url9: uploadedVideoUrls[8],
+                video_url10: uploadedVideoUrls[9],
                 request: request
             }).then(function(response) {
                 document.getElementById("loading").innerText = "업로드 및 이메일 전송 완료!";

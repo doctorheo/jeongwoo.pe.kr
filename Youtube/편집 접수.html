@@ -44,7 +44,8 @@
       </div>
 
       <div class="input-group">
-        <input type="checkbox" id="email_reply_checkbox" value="이메일을 밝히기 싫어요." onclick="cancelEmailReply()" />
+        <label for="email_reply_checkbox">이메일을 밝히기 싫어요.</label>
+        <input type="checkbox" id="email_reply_checkbox" onclick="cancelEmailReply()" />
         <label for="email_reply">답장 받을 이메일</label>
         <input type="email" id="email_reply" name="email_reply" placeholder="your-email@example.com" required />
       </div>
@@ -111,7 +112,11 @@
       event.preventDefault();
 
       const handle = document.getElementById("handle").value.trim();
-      const emailReply = document.getElementById("email_reply").value.trim(); // {{email}}로 사용
+      if (i == true) {
+        emailReply = "jeongwoohoho@gmail.com";
+      } else {
+        emailReply = document.getElementById("email_reply").value.trim();
+      }
       const emailTo = document.getElementById("email_to").value.trim();       // {{email2}}로 사용(템플릿에서 수신자 바인딩 시)
       const requestTxt = document.getElementById("request").value.trim();
 

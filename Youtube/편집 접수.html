@@ -6,19 +6,67 @@
   <title>접수 시스템</title>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; font-family:Arial, sans-serif; }
-    body { display:flex; justify-content:center; align-items:center; min-height:100vh; background:#f4f4f4; }
-    .container { width:400px; background:#fff; border-radius:10px; padding:20px; box-shadow:0 0 10px rgba(0,0,0,.1); text-align:center; }
-    h2 { margin-bottom:12px; }
-    .input-group { margin-bottom:15px; text-align:left; }
-    label { font-size:14px; font-weight:bold; display:block; margin-bottom:6px; }
-    input, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; font-size:14px; }
-    .submit-btn { background:#007BFF; color:#fff; border:none; padding:10px; width:100%; font-size:16px; border-radius:5px; cursor:pointer; transition:.3s; }
-    .submit-btn:hover { background:#0056b3; }
-    .loading { display:none; text-align:center; font-size:15px; font-weight:bold; color:#007BFF; margin:8px 0 12px; }
-    .row { display:flex; gap:8px; }
-    .row > button { flex:1; }
-    .muted { color:#777; font-size:12px; margin-top:6px; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #f4f4f4;
+    }
+    .container {
+      width: 400px;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+      text-align: center;
+    }
+    h2 { margin-bottom: 12px; }
+    .input-group { margin-bottom: 15px; text-align: left; }
+    label {
+      font-size: 14px;
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+    .submit-btn {
+      background: #007BFF;
+      color: #fff;
+      border: none;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: .3s;
+    }
+    .submit-btn:hover { background: #0056b3; }
+    .loading {
+      display: none;
+      text-align: center;
+      font-size: 15px;
+      font-weight: bold;
+      color: #007BFF;
+      margin: 8px 0 12px;
+    }
+    .row {
+      display: flex;
+      gap: 8px;
+    }
+    .row > button { flex: 1; }
+    .muted {
+      color: #777;
+      font-size: 12px;
+      margin-top: 6px;
+    }
   </style>
 </head>
 <body>
@@ -44,15 +92,17 @@
       </div>
 
       <div class="input-group">
-        <label for="email_reply_checkbox">이메일을 밝히기 싫어요.</label>
-        <input type="checkbox" id="email_reply_checkbox" onclick="cancelEmailReply()" />
+        <label>
+          <input type="checkbox" id="email_reply_checkbox" onclick="toggleEmailInput()" />
+          이메일을 밝히기 싫어요.
+        </label>
         <label for="email_reply">답장 받을 이메일</label>
         <input type="email" id="email_reply" name="email_reply" placeholder="your-email@example.com" required />
       </div>
 
       <div class="input-group">
         <label for="email_to">전송할 이메일(건드리지 마십시오.)</label>
-        <input type="email" id="email_to" name="email_to" placeholder="jeongwoohoho@gmail.com" value="jeongwoohoho@gmail.com" required />
+        <input type="email" id="email_to" name="email_to" value="jeongwoohoho@gmail.com" required readonly />
       </div>
 
       <div class="input-group">
@@ -65,66 +115,68 @@
   </div>
 
   <script>
-    function cancelEmailReply() {
-      var i = true;
-      if (i == true) {
-        i = false;
-      } else {
-        i = true;
-      }
-      const emailReply = document.getElementById("email_reply");
-      emailReply.disabled = i;
-    }
-    // EmailJS 초기화 (공개키)
+    // EmailJS 초기화 (공개 키)
     emailjs.init("0cgjp4o3ztpOmGrAD");
 
+    // 이메일 입력 비활성화 토글
+    function toggleEmailInput() {
+      const checkbox = document.getElementById("email_reply_checkbox");
+      const emailInput = document.getElementById("email_reply");
+      emailInput.disabled = checkbox.checked;
+    }
+
+    // 동영상 인풋 추가 (최대 10개)
     function addVideoInput() {
       const videoContainer = document.getElementById("videoContainer");
       const videoInputs = document.querySelectorAll(".video-input");
+
       if (videoInputs.length >= 10) {
         alert("최대 10개의 동영상만 업로드할 수 있습니다.");
         return;
       }
+
       const newInput = document.createElement("input");
       newInput.type = "file";
       newInput.className = "video-input";
       newInput.name = "video";
       newInput.accept = "video/*";
+
       videoContainer.insertBefore(newInput, videoContainer.querySelector(".muted"));
     }
 
+    // 동영상 입력 필드 초기화
     function clearVideos() {
       const container = document.getElementById("videoContainer");
-      const first = container.querySelector(".video-input");
       const muted = container.querySelector(".muted");
-      // 모두 제거 후 첫 번째만 재생성
+
+      // 기존 인풋들 제거
       container.querySelectorAll(".video-input").forEach(el => el.remove());
+
+      // 하나만 다시 추가
       const input = document.createElement("input");
       input.type = "file";
       input.className = "video-input";
       input.name = "video";
       input.accept = "video/*";
       input.required = true;
+
       container.insertBefore(input, muted);
     }
 
+    // 폼 제출 처리
     document.getElementById("submissionForm").addEventListener("submit", async function (event) {
       event.preventDefault();
 
       const handle = document.getElementById("handle").value.trim();
-      if (i == true) {
-        emailReply = "jeongwoohoho@gmail.com";
-      } else {
-        emailReply = document.getElementById("email_reply").value.trim();
-      }
-      const emailTo = document.getElementById("email_to").value.trim();       // {{email2}}로 사용(템플릿에서 수신자 바인딩 시)
+      const checkbox = document.getElementById("email_reply_checkbox");
+      const emailReply = checkbox.checked ? "jeongwoohoho@gmail.com" : document.getElementById("email_reply").value.trim();
+      const emailTo = document.getElementById("email_to").value.trim();
       const requestTxt = document.getElementById("request").value.trim();
 
       const videoInputs = document.querySelectorAll(".video-input");
-      const videoFiles = [];
-      videoInputs.forEach(input => {
-        if (input.files && input.files[0]) videoFiles.push(input.files[0]);
-      });
+      const videoFiles = Array.from(videoInputs)
+        .map(input => input.files[0])
+        .filter(file => !!file);
 
       if (videoFiles.length === 0) {
         alert("동영상 파일을 최소 1개 선택하세요.");
@@ -133,6 +185,7 @@
 
       const loadingEl = document.getElementById("loading");
       const submitBtn = document.getElementById("submitBtn");
+
       loadingEl.style.display = "block";
       submitBtn.disabled = true;
 
@@ -142,6 +195,7 @@
 
         for (let i = 0; i < videoFiles.length; i++) {
           loadingEl.innerText = `동영상 ${i + 1}/${videoFiles.length} 업로드 중...`;
+
           const formData = new FormData();
           formData.append("file", videoFiles[i]);
           formData.append("upload_preset", "videovideo");
@@ -152,24 +206,24 @@
           });
 
           const data = await resp.json();
+
           if (!resp.ok || !data.secure_url) {
             throw new Error(data.error?.message || "Cloudinary 업로드 실패");
           }
+
           uploadedVideoUrls.push(data.secure_url);
         }
 
         // EmailJS로 전송
         loadingEl.innerText = "이메일 전송 중...";
 
-        // 템플릿 변수 페이로드 구성
         const payload = {
-          handle: handle,
+          handle,
           request: requestTxt,
-          email: emailReply, // {{email}}
-          email2: emailTo    // {{email2}} (템플릿에서 to 주소로 쓰려면 해당 변수 바인딩 필요)
+          email: emailReply,
+          email2: emailTo
         };
 
-        // video_url1..10 채우기 (없으면 빈 문자열)
         for (let i = 0; i < 10; i++) {
           payload[`video_url${i + 1}`] = uploadedVideoUrls[i] || "";
         }
@@ -179,14 +233,13 @@
         loadingEl.innerText = "업로드 및 이메일 전송 완료!";
         alert("접수 완료! 이메일이 전송되었습니다.");
 
-        // 폼 리셋
-        (event.target).reset();
+        event.target.reset();
         clearVideos();
       } catch (err) {
         console.error(err);
         alert("오류: " + err.message);
       } finally {
-        setTimeout(() => (loadingEl.style.display = "none"), 1200);
+        setTimeout(() => loadingEl.style.display = "none", 1200);
         submitBtn.disabled = false;
       }
     });

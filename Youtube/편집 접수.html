@@ -44,6 +44,7 @@
       </div>
 
       <div class="input-group">
+        <input type="checkbox" id="email_reply_checkbox" value="이메일을 밝히기 싫어요." onclick="cancelEmailReply()" />
         <label for="email_reply">답장 받을 이메일</label>
         <input type="email" id="email_reply" name="email_reply" placeholder="your-email@example.com" required />
       </div>
@@ -63,6 +64,11 @@
   </div>
 
   <script>
+    function cancelEmailReply() {
+      const emailReplyCheckbox = document.getElementById("email_reply_checkbox");
+      const emailReply = document.getElementById("email_reply");
+      emailReply.disabled = emailReplyCheckbox.value;
+    }
     // EmailJS 초기화 (공개키)
     emailjs.init("0cgjp4o3ztpOmGrAD");
 

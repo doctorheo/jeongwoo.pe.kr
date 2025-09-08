@@ -65,9 +65,14 @@
 
   <script>
     function cancelEmailReply() {
-      const emailReplyCheckbox = document.getElementById("email_reply_checkbox");
+      var i = true;
+      if (i == true) {
+        i = false;
+      } else {
+        i = true;
+      }
       const emailReply = document.getElementById("email_reply");
-      emailReply.disabled = emailReplyCheckbox.value;
+      emailReply.disabled = i;
     }
     // EmailJS 초기화 (공개키)
     emailjs.init("0cgjp4o3ztpOmGrAD");

@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2">
+  <asmv1:assemblyIdentity name="TypingPractice.exe" version="1.0.1.5" publicKeyToken="0000000000000000" language="ko-KR" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="Launcher" version="8.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="Launcher.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC 매니페스트 옵션
+          Windows 사용자 계정 컨트롤 수준을 변경하려면 
+          requestedExecutionLevel 노드를 다음 중 하나로 바꾸세요.
+
+          <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+          <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+          <requestedExecutionLevel level="highestAvailable" uiAccess="false" />
+
+          이전 버전과의 호환성을 위해 파일 및 레지스트리 가상화를 사용하려면 
+          requestedExecutionLevel 노드를 삭제하세요.
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="4.0.30319.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="Launcher.exe" size="16384">
+      <assemblyIdentity name="Launcher" version="8.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+        <dsig:DigestValue>qqHS36xx5l3REpZWwijwCgw4/M5EwWonh70m0sFc0iQ=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="TypingPractice.deps.json" size="434">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>akecF6IvB2TI1/bRtVl8eKI/mtC7YKr9AJe5PE6j8dM=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="TypingPractice.dll" size="14468096">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>Q78d4RXP0hYu6NKnpeJsAmInqWrmqvlGr3EfC+oZrUQ=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="TypingPractice.exe" size="151040">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>mbj8s1jkKUmk2T5gOeDTOayIcqiE+OQ/gEbgUe5/VfE=</dsig:DigestValue>
+    </hash>
+  </file>
+  <file name="TypingPractice.runtimeconfig.json" size="515">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
+      <dsig:DigestValue>ia0epcnCC2smZUfvJ8CuOEDKtWQtPCrt8GtwJiRWcd0=</dsig:DigestValue>
+    </hash>
+  </file>
+</asmv1:assembly>
